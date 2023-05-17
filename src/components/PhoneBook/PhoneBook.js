@@ -1,24 +1,28 @@
 import React from 'react';
 import { useDispatch } from "react-redux";
-import { addContact } from 'redux/contactsSlice';
-import { getContacts } from '../../redux/selectors'
+import { addContact } from '../../redux/operations';
+import { selectContacts } from '../../redux/selectors'
 import { useSelector } from "react-redux";
 import css from './PhoneBook.module.css';
 export const PhoneBook = () => {
 const dispatch = useDispatch();
-const contacts = useSelector(getContacts);
+const contacts = useSelector(selectContacts);
 const onSubmit = e =>{
     e.preventDefault();
-    const userNameValue = e.target.elements.name.value.trim();
-    const numberValue = e.target.elements.number.value.trim();
+    const userNameValue = e.target.elements.name.value;
+    const numberValue = e.target.elements.number.value;
+    const contact = {
+      userName: userNameValue,
+      phone: numberValue
+    };
     if (contacts.some(x => x.userName === userNameValue)) {
         alert(`${userNameValue} is already is contacts`);
         return;
-      } else if(contacts.some(x => x.number === numberValue)) {
+      } else if(contacts.some(x => x.phone === numberValue)) {
         alert(` Number ${numberValue} is already is contacts`);
         return;
       }else {
-          dispatch(addContact(numberValue ,userNameValue))
+          dispatch(addContact(contact))
           e.target.reset();
       }
 }

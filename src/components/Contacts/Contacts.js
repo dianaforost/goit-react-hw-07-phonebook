@@ -1,20 +1,26 @@
-import { getContacts } from 'redux/selectors';
+import { selectFilter, selectContacts,} from 'redux/selectors';
 import { useSelector } from "react-redux";
-import { getFilter } from '../../redux/selectors'
-import { deleteContact } from 'redux/contactsSlice';
+import { deleteContact } from 'redux/operations';
 import { useDispatch } from "react-redux";
+// import { getFilteredContacts } from 'redux/selectors'
 import css from './Contacts.module.css';
 
 export const Contacts = () => {
-    const contactsArray = useSelector(getContacts)
+    const contactsArray = useSelector(selectContacts)
+    // console.log(contactsArray);
     const dispatch = useDispatch();
-    const filter = useSelector(getFilter);
+    const filter = useSelector(selectFilter);
     const getFilteredContacts = () =>{
         const normalizedFilter = filter.filter.toLowerCase().trim();
         return contactsArray.filter(contact =>
           contact.userName.toLowerCase().includes(normalizedFilter))
     }
       const filteredContacts = getFilteredContacts();
+
+
+    //   const handleClick = () =>{
+    //     dispatch(deleteContact(contact.id))
+    //   }
 
     return <ul className={css.list}>
         {filteredContacts.length === 0 ? null :(
@@ -23,7 +29,7 @@ export const Contacts = () => {
                 return (
             <li key={contact.id} className={css.item}>
                 <p className={css.itemTitle}>{contact.userName}:</p>
-                <span className={css.value}>{contact.number}</span>
+                <span className={css.value}>{contact.phone}</span>
                 <button className={css.btn} type="button"
                 onClick={() => dispatch(deleteContact(contact.id))}
                 >
